@@ -1,0 +1,70 @@
+:root {
+    --pst-purple-50: #f5e8ff;
+    --pst-purple-100: #e6d4ff;
+    --pst-purple-200: #d0b2ff;
+    --pst-purple-300: #ba8fff;
+    --pst-purple-400: #a36dff;
+    --pst-purple-500: #8e4eff;
+    --pst-purple-600: #713fcc;
+    --pst-purple-700: #552f99;
+    --pst-purple-800: #392066;
+    --pst-purple-900: #1c1033;
+}
+
+html[data-theme="light"] {
+    --pst-color-accent: var(--pst-purple-500);
+    --pst-color-secondary: var(--pst-purple-500);
+}
+
+html[data-theme="dark"] {
+    --pst-color-accent: var(--pst-purple-300);
+    --pst-color-secondary: var(--pst-purple-300);
+}
+
+a, p,
+a:hover, p:hover {
+    text-decoration: unset !important;
+}
+
+figure {
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-brand {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.logo img {
+    height: 2rem !important;
+}
+
+nav.bd-links .current>a,
+.toc-entry a.nav-link.active,
+.theme-switch-button span:hover,
+.search-button:hover {
+    box-shadow: unset !important;
+}
+
+.article-header-buttons {
+    align-items: center;
+}
+
+.pst-navbar-icon:hover:before {
+    border-bottom: none !important;
+}
+
+.pst-navbar-icon:hover, .bd-header-article .btn:hover {
+    color: var(--pst-color-text-base) !important;
+    text-decoration: none;
+}
+
+.bd-content img:not(.only-dark):not(.dark-light) {
+    border-radius: unset !important;
+}
+
+footer.bd-footer-content {
+    border-top-color: var(--pst-color-border);
+}

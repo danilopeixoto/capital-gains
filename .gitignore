@@ -1,0 +1,14 @@
+.idea/
+.vs/
+.vscode/
+.eggs/
+*.egg-info/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+build/
+dist/
+.DS_Store
+*.rst
+input.jsonl
+output.jsonl

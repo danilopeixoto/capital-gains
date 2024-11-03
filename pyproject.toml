@@ -1,0 +1,58 @@
+[project]
+name = "capital-gains"
+description = "A command-line tool for calculating capital gains tax on stock transactions."
+readme = "README.md"
+authors = [
+    {name = "Capital Gains Maintainers", email = "capitalgainsmaintainers@nubank.com"}
+]
+license = {file = "LICENSE.md"}
+keywords = [
+    "capital",
+    "gains",
+    "tax",
+    "stock",
+    "tool",
+    "cli"
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License"
+]
+requires-python = ">=3.10.0"
+dynamic = [
+    "version",
+    "dependencies",
+    "optional-dependencies"
+]
+
+[project.urls]
+Homepage = "https://capital-gains.readthedocs.io"
+Documentation = "https://capital-gains.readthedocs.io"
+Repository = "https://github.com/nubank/capital-gains"
+Issues = "https://github.com/nubank/capital-gains/issues"
+Changelog = "https://capital-gains.readthedocs.io/en/stable/changelog.html"
+
+[project.scripts]
+capital-gains = "capital_gains.cli:app"
+
+[build-system]
+requires = [
+    "setuptools",
+    "setuptools_scm"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+optional-dependencies = {development = {file = ["requirements-development.txt"]}}
+
+[[tool.mypy.overrides]]
+module = ["pygments.*"]
+ignore_missing_imports = true
+
+[tool.isort]
+profile = "black"
