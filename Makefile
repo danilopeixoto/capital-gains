@@ -9,7 +9,7 @@ test: ## Run tests.
 	pytest $(TEST_DIR)
 
 test-coverage: ## Run tests with coverage.
-	pytest --cov=. $(TEST_DIR)
+	pytest --cov=. --cov-fail-under=80 $(TEST_DIR)
 
 docs: ## Build and serve the documentation.
 	sphinx-autobuild --port $(DOCS_PORT) $(DOCS_DIR) $(DOCS_BUILD_DIR)

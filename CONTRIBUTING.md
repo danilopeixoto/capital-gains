@@ -41,7 +41,7 @@ pytest tests/
 Test package with coverage:
 
 ```console
-pytest --cov=. tests/
+pytest --cov=. --cov-fail-under=80 tests/
 ```
 
 Build and run documentation:
