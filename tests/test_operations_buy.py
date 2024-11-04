@@ -2,35 +2,44 @@
 Test the buy operation module.
 """
 
-import pytest
 from decimal import Decimal
+
+import pytest
 
 from capital_gains.models import OperationModel, OperationType, ResultModel
 from capital_gains.operations.buy import BuyOperation
 from capital_gains.states.portfolio import PortfolioState
 
+
 @pytest.mark.parametrize(
     "operation, state, expected_state, expected_result",
     [
         (
-            OperationModel(operation=OperationType.BUY, quantity=10, unit_cost=Decimal("100")),
+            OperationModel(
+                operation=OperationType.BUY, quantity=10, unit_cost=Decimal("100")
+            ),
             PortfolioState(total_shares=0, average_cost=Decimal("0")),
             PortfolioState(total_shares=10, average_cost=Decimal("100")),
-            ResultModel(tax=Decimal("0"))
+            ResultModel(tax=Decimal("0")),
         ),
         (
-            OperationModel(operation=OperationType.BUY, quantity=5, unit_cost=Decimal("200")),
+            OperationModel(
+                operation=OperationType.BUY, quantity=5, unit_cost=Decimal("200")
+            ),
             PortfolioState(total_shares=10, average_cost=Decimal("100")),
-            PortfolioState(total_shares=15, average_cost=Decimal("100") + Decimal("100") / Decimal("3")),
-            ResultModel(tax=Decimal("0"))
+            PortfolioState(
+                total_shares=15,
+                average_cost=Decimal("100") + Decimal("100") / Decimal("3"),
+            ),
+            ResultModel(tax=Decimal("0")),
         ),
-    ]
+    ],
 )
 def test_process_operation(
     operation: OperationModel,
     state: PortfolioState,
     expected_state: PortfolioState,
-    expected_result: ResultModel
+    expected_result: ResultModel,
 ):
     """
     Test processing a buy operation.
@@ -50,5 +59,5 @@ def test_process_operation(
 
     assert state.total_shares == expected_state.total_shares
     assert state.average_cost == expected_state.average_cost
-    
+
     assert result.tax == expected_result.tax

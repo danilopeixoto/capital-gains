@@ -16,31 +16,18 @@ from capital_gains.states.portfolio import PortfolioState
 @pytest.mark.parametrize(
     "operation_types, expected_tax_results",
     [
-        (
-            [],
-            []
-        ),
-        (
-            [OperationType.BUY],
-            [Decimal("0")]
-        ),
-        (
-            [OperationType.BUY, OperationType.SELL],
-            [Decimal("0"), Decimal("1")]
-        ),
-        (
-            [OperationType.SELL, OperationType.BUY],
-            [Decimal("1"), Decimal("0")]
-        ),
+        ([], []),
+        ([OperationType.BUY], [Decimal("0")]),
+        ([OperationType.BUY, OperationType.SELL], [Decimal("0"), Decimal("1")]),
+        ([OperationType.SELL, OperationType.BUY], [Decimal("1"), Decimal("0")]),
         (
             [OperationType.BUY, OperationType.SELL, OperationType.BUY],
-            [Decimal("0"), Decimal("1"), Decimal("0")]
+            [Decimal("0"), Decimal("1"), Decimal("0")],
         ),
     ],
 )
 def test_process_operations(
-    operation_types: List[OperationType],
-    expected_tax_results: List[Decimal]
+    operation_types: List[OperationType], expected_tax_results: List[Decimal]
 ):
     """
     Test processing a batch of operations with the tax calculator.
@@ -59,8 +46,12 @@ def test_process_operations(
     state = PortfolioState()
 
     calculator = TaxCalculator(state)
-    calculator.operation_register[OperationType.BUY].process = MagicMock(return_value=buy_result)
-    calculator.operation_register[OperationType.SELL].process = MagicMock(return_value=sell_result)
+    calculator.operation_register[OperationType.BUY].process = MagicMock(  # type: ignore
+        return_value=buy_result
+    )
+    calculator.operation_register[OperationType.SELL].process = MagicMock(  # type: ignore
+        return_value=sell_result
+    )
 
     operations = [
         OperationModel(operation=operation_type, quantity=10, unit_cost=Decimal("10"))

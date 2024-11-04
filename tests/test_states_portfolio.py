@@ -3,8 +3,10 @@ Test the portfolio state.
 """
 
 from decimal import Decimal
-from typing import List, Tuple
+from typing import Tuple
+
 import pytest
+
 from capital_gains.states.portfolio import PortfolioState
 
 
@@ -22,12 +24,13 @@ def test_initial_state():
     assert portfolio.average_cost == 0
     assert portfolio.total_loss == 0
 
+
 @pytest.mark.parametrize(
     "args",
     [
         (0, Decimal("0"), Decimal("0")),
         (100, Decimal("10"), Decimal("1000")),
-        (500, Decimal("25"), Decimal("5000"))
+        (500, Decimal("25"), Decimal("5000")),
     ],
 )
 def test_state_initialization(args: Tuple[int, Decimal, Decimal]):

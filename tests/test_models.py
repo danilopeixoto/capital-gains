@@ -2,10 +2,10 @@
 Test models module.
 """
 
-
 from decimal import Decimal
 
 import pytest
+
 from capital_gains.models import OperationModel, OperationType, ResultModel
 
 
@@ -16,8 +16,8 @@ from capital_gains.models import OperationModel, OperationType, ResultModel
         (Decimal("123.4"), Decimal("123.40")),
         (Decimal("123.45"), Decimal("123.45")),
         (Decimal("123.451"), Decimal("123.45")),
-        (Decimal("123.456"), Decimal("123.46"))
-    ]
+        (Decimal("123.456"), Decimal("123.46")),
+    ],
 )
 def test_decimal_rounding(value: Decimal, expected_value: Decimal):
     """
@@ -32,16 +32,15 @@ def test_decimal_rounding(value: Decimal, expected_value: Decimal):
     """
 
     operation = OperationModel(
-        operation=OperationType.BUY,
-        quantity=10,
-        unit_cost=value
+        operation=OperationType.BUY, quantity=10, unit_cost=value
     )
 
     assert operation.unit_cost == expected_value
 
-    result = ResultModel(tax = value)
+    result = ResultModel(tax=value)
 
     assert result.tax == expected_value
+
 
 @pytest.mark.parametrize(
     "value, expected_value",
@@ -50,8 +49,8 @@ def test_decimal_rounding(value: Decimal, expected_value: Decimal):
         (Decimal("123.4"), 123.4),
         (Decimal("123.45"), 123.45),
         (Decimal("123.451"), 123.45),
-        (Decimal("123.456"), 123.46)
-    ]
+        (Decimal("123.456"), 123.46),
+    ],
 )
 def test_decimal_serialization(value: Decimal, expected_value: float):
     """
@@ -67,16 +66,17 @@ def test_decimal_serialization(value: Decimal, expected_value: float):
     """
 
     operation = OperationModel(
-        operation=OperationType.BUY,
-        quantity=10,
-        unit_cost=value
+        operation=OperationType.BUY, quantity=10, unit_cost=value
     )
 
     json_operation = operation.model_dump_json()
 
-    assert json_operation == f'{{"operation":"buy","quantity":10,"unit_cost":{expected_value}}}'
+    assert (
+        json_operation
+        == f'{{"operation":"buy","quantity":10,"unit_cost":{expected_value}}}'
+    )
 
-    result = ResultModel(tax = value)
+    result = ResultModel(tax=value)
 
     json_result = result.model_dump_json()
 

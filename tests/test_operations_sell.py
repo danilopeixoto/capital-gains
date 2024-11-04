@@ -2,47 +2,79 @@
 Test the sell operation module.
 """
 
-import pytest
 from decimal import Decimal
+
+import pytest
 
 from capital_gains.models import OperationModel, OperationType, ResultModel
 from capital_gains.operations.sell import SellOperation
 from capital_gains.states.portfolio import PortfolioState
 
+
 @pytest.mark.parametrize(
     "operation, state, expected_state, expected_result",
     [
         (
-            OperationModel(operation=OperationType.SELL, quantity=10, unit_cost=Decimal("100")),
-            PortfolioState(total_shares=10, average_cost=Decimal("100"), total_loss=Decimal("100")),
-            PortfolioState(total_shares=0, average_cost=Decimal("100"), total_loss=Decimal("100")),
-            ResultModel(tax=Decimal("0"))
+            OperationModel(
+                operation=OperationType.SELL, quantity=10, unit_cost=Decimal("100")
+            ),
+            PortfolioState(
+                total_shares=10, average_cost=Decimal("100"), total_loss=Decimal("100")
+            ),
+            PortfolioState(
+                total_shares=0, average_cost=Decimal("100"), total_loss=Decimal("100")
+            ),
+            ResultModel(tax=Decimal("0")),
         ),
         (
-            OperationModel(operation=OperationType.SELL, quantity=200000, unit_cost=Decimal("500")),
-            PortfolioState(total_shares=200000, average_cost=Decimal("200"), total_loss=Decimal("0")),
-            PortfolioState(total_shares=0, average_cost=Decimal("200"), total_loss=Decimal("0")),
-            ResultModel(tax=Decimal("12000000"))
+            OperationModel(
+                operation=OperationType.SELL, quantity=200000, unit_cost=Decimal("500")
+            ),
+            PortfolioState(
+                total_shares=200000,
+                average_cost=Decimal("200"),
+                total_loss=Decimal("0"),
+            ),
+            PortfolioState(
+                total_shares=0, average_cost=Decimal("200"), total_loss=Decimal("0")
+            ),
+            ResultModel(tax=Decimal("12000000")),
         ),
         (
-            OperationModel(operation=OperationType.SELL, quantity=50, unit_cost=Decimal("30")),
-            PortfolioState(total_shares=100, average_cost=Decimal("200"), total_loss=Decimal("1000")),
-            PortfolioState(total_shares=50, average_cost=Decimal("200"), total_loss=Decimal("9500")),
-            ResultModel(tax=Decimal("0"))
+            OperationModel(
+                operation=OperationType.SELL, quantity=50, unit_cost=Decimal("30")
+            ),
+            PortfolioState(
+                total_shares=100,
+                average_cost=Decimal("200"),
+                total_loss=Decimal("1000"),
+            ),
+            PortfolioState(
+                total_shares=50, average_cost=Decimal("200"), total_loss=Decimal("9500")
+            ),
+            ResultModel(tax=Decimal("0")),
         ),
         (
-            OperationModel(operation=OperationType.SELL, quantity=50, unit_cost=Decimal("3000")),
-            PortfolioState(total_shares=100, average_cost=Decimal("200"), total_loss=Decimal("1000")),
-            PortfolioState(total_shares=50, average_cost=Decimal("200"), total_loss=Decimal("0")),
-            ResultModel(tax=Decimal("27800"))
+            OperationModel(
+                operation=OperationType.SELL, quantity=50, unit_cost=Decimal("3000")
+            ),
+            PortfolioState(
+                total_shares=100,
+                average_cost=Decimal("200"),
+                total_loss=Decimal("1000"),
+            ),
+            PortfolioState(
+                total_shares=50, average_cost=Decimal("200"), total_loss=Decimal("0")
+            ),
+            ResultModel(tax=Decimal("27800")),
         ),
-    ]
+    ],
 )
 def test_process_operation(
     operation: OperationModel,
     state: PortfolioState,
     expected_state: PortfolioState,
-    expected_result: ResultModel
+    expected_result: ResultModel,
 ):
     """
     Test processing a sell operation.
