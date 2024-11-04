@@ -35,6 +35,4 @@ jobs:
           - name: install-package
             run: pip install -e .[development]
           - name: test-package
-            run: pytest tests/
-          - name: test-coverage-package
             run: pytest --cov=. --cov-fail-under=80 tests/
