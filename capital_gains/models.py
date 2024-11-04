@@ -7,10 +7,10 @@ built with data validation and serialization, providing a robust
 foundation for handling structured data within the system.
 """
 
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from enum import Enum
-from typing import List
-from pydantic import BaseModel, condecimal
+
+from pydantic import BaseModel, Field, model_validator
 
 
 class OperationType(str, Enum):
@@ -21,7 +21,48 @@ class OperationType(str, Enum):
     BUY = "buy"
     SELL = "sell"
 
-class OperationModel(BaseModel):
+
+class BaseDecimalModel(BaseModel):
+    """
+    Base model for handling decimal attributes with automatic rounding.
+    """
+
+    class Config:
+        """
+        Model configuration settings.
+        """
+
+        #: Custom JSON encoder to prevent Decimal values from being serialized as strings.
+        json_encoders = {
+            Decimal: lambda x: float(x)  # pylint: disable=unnecessary-lambda
+        }
+
+        #: Populate model attributes by name.
+        populate_by_name = True
+
+    @model_validator(mode="after")
+    def validate_and_round_decimal_values(self) -> "BaseDecimalModel":
+        """
+        Validate and round all decimal values in the model.
+
+        This method ensures that all decimal values are rounded to two
+        decimal places using the `ROUND_HALF_UP` rounding strategy.
+
+        Returns:
+            BaseDecimalModel: The validated and rounded model.
+        """
+
+        for name, value in self:
+            if isinstance(value, Decimal):
+                # Round financial values to two decimal places.
+                setattr(
+                    self, name, value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                )
+
+        return self
+
+
+class OperationModel(BaseDecimalModel):
     """
     Model representing a financial operation.
     """
@@ -32,31 +73,14 @@ class OperationModel(BaseModel):
     #: The quantity of shares traded in the operation.
     quantity: int
 
-    #: The unit price of the stock in currency with two decimal places.
-    unit_cost: Decimal = condecimal(max_digits=10, decimal_places=2, alias="unit-cost")
+    #: The unit price of the stock.
+    unit_cost: Decimal = Field(..., alias="unit-cost")
 
-class ResultModel(BaseModel):
+
+class ResultModel(BaseDecimalModel):
     """
     Model representing a calculation result.
     """
 
     #: Results of a tax calculation.
-    tax: Decimal = condecimal(max_digits=10, decimal_places=2)
-
-
-class OperationBatchModel(BaseModel):
-    """
-    Model representing a batch of financial operations.
-    """
-
-    #: A list of financial operations.
-    batch: List[OperationModel]
-
-
-class ResultBatchModel(BaseModel):
-    """
-    Model representing a batch of calculation results.
-    """
-
-    #: A list of calculation results.
-    batch: List[ResultModel]
+    tax: Decimal

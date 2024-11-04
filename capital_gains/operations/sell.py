@@ -8,12 +8,13 @@ process sell transactions while updating the portfolio state.
 """
 
 from decimal import Decimal
-from .base import BaseOperation
+
 from ..models import OperationModel, ResultModel
 from ..states import PortfolioState
+from .base import BaseOperation
 
 
-class SellOperation(BaseOperation):
+class SellOperation(BaseOperation[PortfolioState]):
     """
     Class representing a sell operation.
 
@@ -23,10 +24,10 @@ class SellOperation(BaseOperation):
     """
 
     #: The threshold for exempting a sale value from taxation.
-    exempt_tax_sale_threshold: Decimal = 20000
+    exempt_tax_sale_threshold: Decimal = Decimal(20000)
 
     #: The percentage rate at which tax is applied to profits.
-    tax_percentage: Decimal = 0.2
+    tax_percentage: Decimal = Decimal(0.2)
 
     def process(self, operation: OperationModel, state: PortfolioState) -> ResultModel:
         """
@@ -56,24 +57,25 @@ class SellOperation(BaseOperation):
         profit = sale_value - cost_value
 
         # If there is no profit or a loss, apply the loss to total loss and return no tax.
-        if profit <= 0:
+        if profit <= Decimal("0"):
             # This loss will be reduced from subsequent profits.
             state.total_loss -= profit
 
-            return ResultModel(tax=0)
+            return ResultModel(tax=Decimal("0"))
 
         # If the total sale value is less than or equal to the exempt threshold, return no tax.
         if sale_value <= self.exempt_tax_sale_threshold:
-            return ResultModel(tax=0)
+            return ResultModel(tax=Decimal("0"))
 
         # Calculate taxable profit after accounting for previous losses, and
         # update total loss, reducing it by the profit realized from this sale.
-        taxable_profit = max(0, profit - state.total_loss)
-        state.total_loss = max(0, state.total_loss - profit)
+        taxable_profit = max(Decimal("0"), profit - state.total_loss)
+        state.total_loss = max(Decimal("0"), state.total_loss - profit)
 
-        # If there is taxable profit, calculate the tax owed using tax percentage rate and return it.
-        if taxable_profit > 0:
+        # If there is taxable profit, calculate the tax owed using
+        # tax percentage rate and return it.
+        if taxable_profit > Decimal("0"):
             return ResultModel(tax=taxable_profit * self.tax_percentage)
 
         # Otherwise return no tax.
-        return ResultModel(tax=0)
+        return ResultModel(tax=Decimal("0"))

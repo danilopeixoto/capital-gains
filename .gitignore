@@ -9,6 +9,7 @@ __pycache__/
 build/
 dist/
 .DS_Store
+.coverage
 *.rst
 input.jsonl
 output.jsonl

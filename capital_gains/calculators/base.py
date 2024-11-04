@@ -9,56 +9,62 @@ and define their own processing logic for different types of operations.
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, List
+from typing import Dict, Generator, Generic, List, TypeVar
 
+from ..models import OperationModel, OperationType, ResultModel
 from ..operations import BaseOperation
 
-from ..states import BaseState
-from ..models import OperationBatchModel, OperationType, ResultBatchModel
+StateTypeT = TypeVar("StateTypeT")
 
 
-class BaseCalculator(ABC):
+class BaseCalculator(ABC, Generic[StateTypeT]):
     """
     Abstract base class for financial calculators.
 
     This class serves as the foundation for all calculators that
     manage operations on financial data. It holds the current
-    state of the financial system and a list of operations to
+    state of the financial system and a list of compatible operations to
     be processed.
     """
 
     #: The current state of the financial system.
-    state: BaseState
+    state: StateTypeT
 
     #: The operation register.
-    operation_register: Dict[OperationType, BaseOperation]
+    operation_register: Dict[OperationType, BaseOperation[StateTypeT]]
 
-    def __init__(self, state: BaseState, operation_register: Dict[OperationType, BaseOperation]):
+    def __init__(
+        self,
+        state: StateTypeT,
+        operation_register: Dict[OperationType, BaseOperation[StateTypeT]],
+    ):
         """
         Initialize the base calculator with the given state and operations.
 
         Parameters:
-            state (BaseState): The current state of the financial system.
-            operation_register (Dict[OperationType, BaseOperation]): The operation register.
+            state (StateTypeT): The current state of the financial system.
+            operation_register (Dict[OperationType, BaseOperation[StateTypeT]]):
+                The operation register.
         """
 
         self.state = state
         self.operation_register = operation_register
 
     @abstractmethod
-    def process(self, operations: OperationBatchModel) -> ResultBatchModel:
+    def process(
+        self, operations: List[OperationModel]
+    ) -> Generator[ResultModel, None, None]:
         """
         Process a batch of operations.
 
         This abstract method must be implemented by subclasses to
         define the logic for processing a batch of financial
-        operations and returning the corresponding results.
+        operations and yielding the corresponding results.
 
         Parameters:
-            operations (OperationBatchModel): A model containing a batch of operations to process.
+            operations (List[OperationModel]): A batch of operations to process.
 
         Returns:
-            ResultBatchModel: A model containing the results of the calculations.
+            Generator[ResultModel, None, None]:
+                A generator yielding the results of the calculations.
         """
-
-        pass

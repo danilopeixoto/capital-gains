@@ -7,12 +7,14 @@ the `BaseOperation` class and implements the logic required to
 process buy transactions while updating the portfolio state.
 """
 
-from .base import BaseOperation
+from decimal import Decimal
+
 from ..models import OperationModel, ResultModel
 from ..states import PortfolioState
+from .base import BaseOperation
 
 
-class BuyOperation(BaseOperation):
+class BuyOperation(BaseOperation[PortfolioState]):
     """
     Class representing a buy operation.
 
@@ -36,7 +38,9 @@ class BuyOperation(BaseOperation):
             ResultModel: The result of processing the operation.
         """
 
-        total_cost = (state.total_shares * state.average_cost) + (operation.quantity * operation.unit_cost)
+        total_cost = (state.total_shares * state.average_cost) + (
+            operation.quantity * operation.unit_cost
+        )
 
         # Increase the total shares in the portfolio by the quantity bought.
         state.total_shares += operation.quantity
@@ -45,4 +49,4 @@ class BuyOperation(BaseOperation):
         state.average_cost = total_cost / state.total_shares
 
         # No tax for buy operations.
-        return ResultModel(tax=0)
+        return ResultModel(tax=Decimal("0"))

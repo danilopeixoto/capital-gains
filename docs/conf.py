@@ -49,6 +49,7 @@ html_logo = "_static/images/logo.svg"
 html_static_path = ["_static/", "_static/images/"]
 html_css_files = ["styles/custom.css"]
 copyright = "2024, Nu Holdings Ltd. All rights reserved"
+author = ""
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {

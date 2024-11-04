@@ -8,12 +8,14 @@ processed uniformly.
 """
 
 from abc import ABC, abstractmethod
+from typing import Generic, TypeVar
 
-from ..states import BaseState
 from ..models import OperationModel, ResultModel
 
+StateTypeT = TypeVar("StateTypeT")
 
-class BaseOperation(ABC):
+
+class BaseOperation(ABC, Generic[StateTypeT]):
     """
     Abstract base class for financial operations.
 
@@ -24,7 +26,7 @@ class BaseOperation(ABC):
     """
 
     @abstractmethod
-    def process(self, operation: OperationModel, state: BaseState) -> ResultModel:
+    def process(self, operation: OperationModel, state: StateTypeT) -> ResultModel:
         """
         Process a financial operation.
 
@@ -33,10 +35,8 @@ class BaseOperation(ABC):
 
         Parameters:
             operation (OperationModel): The operation details.
-            state (BaseState): The current state of the calculation.
+            state (StateTypeT): The current state of the calculation.
 
         Returns:
             ResultModel: The result of processing the operation.
         """
-
-        pass

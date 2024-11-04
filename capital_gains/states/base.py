@@ -18,5 +18,3 @@ class BaseState(ABC):
     state implementations. It can be extended to define various types of
     states that the system may encounter.
     """
-
-    pass

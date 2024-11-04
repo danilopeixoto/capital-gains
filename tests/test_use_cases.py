@@ -1,12 +1,15 @@
+"""
+Test use case scenarios for CLI application.
+"""
+
 import os
 
+import pytest
 from typer import Typer
 from typer.testing import CliRunner
 
-import pytest
 
-
-pytest.mark.parametrize(
+@pytest.mark.parametrize(
     "input_filename, output_filename",
     [
         ("input.0.jsonl", "output.0.jsonl"),
@@ -18,15 +21,15 @@ pytest.mark.parametrize(
         ("input.6.jsonl", "output.6.jsonl"),
         ("input.7.jsonl", "output.7.jsonl"),
         ("input.8.jsonl", "output.8.jsonl"),
-        ("input.9.jsonl", "output.9.jsonl")
-    ]
+        ("input.9.jsonl", "output.9.jsonl"),
+    ],
 )
-def test_use_cases(
+def test_scenarios(
     input_filename: str,
     output_filename: str,
     data_path: str,
-    app: Typer,
-    runner: CliRunner
+    cli_app: Typer,
+    cli_runner: CliRunner,
 ):
     """
     Test CLI application with various input-output use cases.
@@ -38,11 +41,12 @@ def test_use_cases(
         input_filename (str): The name of the input JSONL file to test.
         output_filename (str): The name of the expected output JSONL file.
         data_path (str): The path to the directory containing the input and output files.
-        app (Typer): The CLI application instance used for testing.
-        runner (CliRunner): The CLI testing runner for invoking commands.
+        cli_app (Typer): The CLI application instance used for testing.
+        cli_runner (CliRunner): The CLI testing runner for invoking commands.
 
-    Asserts:
-        The output produced by the CLI application matches the expected output.
+    Raises:
+        AssertionError:
+            The output produced by the CLI application does not match the expected output.
     """
 
     input_filepath = os.path.join(data_path, input_filename)
@@ -54,7 +58,7 @@ def test_use_cases(
     with open(output_filepath, "r", encoding="utf-8") as output_file:
         expected_output_data = output_file.read()
 
-    result = runner.invoke(app, input=input_data)
+    result = cli_runner.invoke(cli_app, input=input_data)
     output_data = result.stdout
 
     assert output_data == expected_output_data

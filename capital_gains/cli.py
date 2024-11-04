@@ -7,33 +7,42 @@ from the terminal.
 """
 
 import sys
+from typing import List
+
 import typer
+from pydantic import TypeAdapter
 
 from . import __version__
-
-from .states import PortfolioState
 from .calculators import TaxCalculator
-from .models import OperationBatchModel
+from .models import OperationModel, ResultModel
+from .states import PortfolioState
+
+app = typer.Typer(add_completion=False)
 
 
-app = typer.Typer()
-
-@app.command()
-def main():
+@app.callback(invoke_without_command=True)
+def main(context: typer.Context):
     """
     Process a batch of financial operations from standard input.
+
+    Example: capital-gains < input.jsonl > output.jsonl
     """
 
-    for line in sys.stdin.readlines():
+    if context.invoked_subcommand is not None:
+        return
+
+    for json_operations in sys.stdin:
+        # Reset the state and calculator for each line of input.
         state = PortfolioState()
         calculator = TaxCalculator(state)
 
-        operations = OperationBatchModel.model_validate_json(line)
-        results = calculator.process(operations)
+        operations = TypeAdapter(List[OperationModel]).validate_json(json_operations)
+        results = list(calculator.process(operations))
 
-        typer.echo(results.model_dump_json())
+        typer.echo(TypeAdapter(List[ResultModel]).dump_json(results))
 
-@app.command(name="version")
+
+@app.command()
 def version():
     """
     Show the version of the application and exit.

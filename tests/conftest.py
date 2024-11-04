@@ -2,14 +2,11 @@
 Test configuration module.
 """
 
-# pylint: disable=redefined-outer-name
-
 import os
 
+import pytest
 from typer import Typer
 from typer.testing import CliRunner
-
-import pytest
 
 from capital_gains.cli import app
 
@@ -25,8 +22,9 @@ def data_path() -> str:
 
     return os.path.join(os.path.dirname(__file__), "data")
 
+
 @pytest.fixture
-def app() -> Typer:
+def cli_app() -> Typer:
     """
     Provides the Typer application instance for testing.
 
@@ -36,8 +34,9 @@ def app() -> Typer:
 
     return app
 
+
 @pytest.fixture
-def runner() -> CliRunner:
+def cli_runner() -> CliRunner:
     """
     Provides a CLI testing runner for executing command-line interface
     commands during tests.

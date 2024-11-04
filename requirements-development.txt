@@ -4,6 +4,7 @@ black
 pylint
 pre-commit
 pytest
+pytest-cov
 sphinx
 sphinx-autobuild
 sphinx-book-theme

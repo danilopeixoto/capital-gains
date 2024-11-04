@@ -38,6 +38,12 @@ Test package:
 pytest tests/
 ```
 
+Test package with coverage:
+
+```console
+pytest --cov=. tests/
+```
+
 Build and run documentation:
 
 ```console

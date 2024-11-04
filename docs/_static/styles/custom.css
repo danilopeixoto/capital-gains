@@ -68,3 +68,10 @@ nav.bd-links .current>a,
 footer.bd-footer-content {
     border-top-color: var(--pst-color-border);
 }
+
+.header-article__inner .header-article-items__end,
+.header-article__inner .header-article-items__start {
+    align-items: start;
+    display: flex;
+    gap: .5rem;
+}

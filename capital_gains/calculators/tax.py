@@ -7,19 +7,15 @@ It uses specific strategies for each type of operation and maintains the state o
 financial portfolio throughout the calculations.
 """
 
-from ..models import (
-    OperationType,
-    OperationModel,
-    ResultModel,
-    OperationBatchModel,
-    ResultBatchModel
-)
-from .base import BaseCalculator
-from ..states import PortfolioState
+from typing import Generator, List
+
+from ..models import OperationModel, OperationType, ResultModel
 from ..operations import BuyOperation, SellOperation
+from ..states import PortfolioState
+from .base import BaseCalculator
 
 
-class TaxCalculator(BaseCalculator):
+class TaxCalculator(BaseCalculator[PortfolioState]):
     """
     A calculator for determining tax obligations based on financial operations.
 
@@ -42,43 +38,23 @@ class TaxCalculator(BaseCalculator):
 
         super().__init__(
             state,
-            {
-                OperationType.BUY: BuyOperation(),
-                OperationType.SELL: SellOperation()
-            }
+            {OperationType.BUY: BuyOperation(), OperationType.SELL: SellOperation()},
         )
 
-    def calculate_tax(self, operation: OperationModel) -> ResultModel:
-        """
-        Calculate the tax for a specific financial operation.
-
-        This method retrieves the appropriate handler based on the type of operation
-        and delegates the processing of the tax calculation to that handler.
-
-        Parameters:
-            operation (OperationModel): The operation details.
-
-        Returns:
-            ResultModel: The result of processing the operation.
-        """
-
-        operation_handler = self.operation_register[operation.operation]
-        return operation_handler.process(operation, self.state)
-
-    def process(self, operations: OperationBatchModel) -> ResultBatchModel:
+    def process(
+        self, operations: List[OperationModel]
+    ) -> Generator[ResultModel, None, None]:
         """
         Process a batch of operations and calculate taxes.
 
         Parameters:
-            operations (OperationBatchModel): A model containing a batch of operations to process.
+            operations (List[OperationModel]): A batch of operations to process.
 
         Returns:
-            ResultBatchModel: A model containing the results of the calculations.
+            Generator[ResultModel, None, None]:
+                A generator yielding the results of the calculations.
         """
 
-        results = [
-            self.calculate_tax(operation)
-            for operation in operations.batch
-        ]
-
-        return ResultBatchModel(results=results)
+        for operation in operations:
+            operation_handler = self.operation_register[operation.operation]
+            yield operation_handler.process(operation, self.state)

@@ -36,3 +36,5 @@ jobs:
             run: pip install -e .[development]
           - name: test-package
             run: pytest tests/
+          - name: test-coverage-package
+            run: pytest --cov=. tests/
