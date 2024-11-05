@@ -6,5 +6,3 @@ dependencies:
   - pip
   - pip:
       - -e .[development]
-variables:
-    SETUPTOOLS_SCM_PRETEND_VERSION: 0.0.0

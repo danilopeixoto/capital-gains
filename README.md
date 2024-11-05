@@ -17,7 +17,7 @@ The command-line interface (CLI) tool is implemented as a Python package and can
 
 In addition, the project offers a containerized development environment for the tool using [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers).
 
-To enable anonymization, the `.git` folder was removed, leading to several implications. The pre-commit hooks will no longer function, and the automatic versioning of packages will prevent the environment setup unless `SETUPTOOLS_SCM_PRETEND_VERSION=0.0.0` is exported. However, for the available development environment recipes (Conda and Dev Containers), this variable is already set, so no additional action is required.
+To enable anonymization, the `.git` folder was removed, leading to project template implications. The pre-commit hooks will no longer function, and **the automatic versioning of packages will prevent the environment setup unless `SETUPTOOLS_SCM_PRETEND_VERSION=0.0.0` is exported. In the Dev Container environment, this variable is already set, so no additional action is required.
 
 The runtime complexity of the implementation is `O(NM)`, where `N` is the number of lines processed and `M` is the average number of operations performed per line. The memory complexity is `O(M)`, as each line is processed lazily, meaning that only one line's operations are held in memory at any time.
 
