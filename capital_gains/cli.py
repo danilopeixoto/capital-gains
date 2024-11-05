@@ -21,7 +21,7 @@ app = typer.Typer(add_completion=False)
 
 
 @app.callback(invoke_without_command=True)
-def main(context: typer.Context):
+def tax(context: typer.Context):
     """
     Process a batch of financial operations from standard input.
 
