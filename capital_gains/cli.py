@@ -25,7 +25,7 @@ def tax(context: typer.Context):
     """
     Process a batch of financial operations from standard input.
 
-    Example: capital-gains < input.jsonl > output.jsonl
+    Example: capital-gains < input.sample.jsonl > output.sample.jsonl
     """
 
     if context.invoked_subcommand is not None:

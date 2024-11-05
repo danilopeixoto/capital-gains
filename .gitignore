@@ -11,5 +11,4 @@ dist/
 .DS_Store
 .coverage
 *.rst
-input.jsonl
-output.jsonl
+output.sample.jsonl

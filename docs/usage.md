@@ -2,7 +2,7 @@
 
 ## Tax calculation
 
-Prepare an `input.jsonl` file with the following format:
+Prepare an `input.sample.jsonl` file with the following format:
 
 ```json
 [{"operation": "buy", "unit-cost": 10.00, "quantity": 10000}, {"operation": "sell", "unit-cost": 20.00, "quantity": 5000}]
@@ -13,10 +13,10 @@ Prepare an `input.jsonl` file with the following format:
 Run the tool:
 
 ```console
-capital-gains < input.jsonl > output.jsonl
+capital-gains < input.sample.jsonl > output.sample.jsonl
 ```
 
-Check the `output.jsonl` file to view the tax calculations:
+Check the `output.sample.jsonl` file to view the tax calculations:
 
 ```json
 [{"tax":0.0},{"tax":10000.0}]
@@ -24,4 +24,4 @@ Check the `output.jsonl` file to view the tax calculations:
 
 ```
 
-Each line in the output corresponds to the calculated tax for each transaction in the `input.jsonl` file.
+Each line in the output corresponds to the calculated tax for each transaction in the `input.sample.jsonl` file.
