@@ -1,14 +1,14 @@
 # Review notes
 
+![Architecture](./review-notes/architecture.png)
+*Overview of the system architecture.*
+
 This project template was developed to follow the format of an open-source project by [Nubank on GitHub](https://github.com/nubank). In compliance with interview process guidelines, **the source code and associated artifacts are not actually published on public platforms**, which may lead to broken links or non-applicable commands in the instructions originally intended for the published version of the repository, package, or documentation.
 
 ![Documentation](./review-notes/documentation.png)
 *Documentation for the tool, along with the API reference.*
 
 If you are a reviewer, please refer to the [Contributing Guide](./CONTRIBUTING.md) for instructions on developing the tool and running the documentation, and check the live or source version of the documentation for [usage instructions](./docs/usage.md). The core logic of the implementation is found in the [`capital_gains` module](./capital_gains).
-
-![Architecture](./review-notes/architecture.png)
-*Overview of the system architecture.*
 
 The command-line interface (CLI) tool is implemented as a Python package and can be developed, installed, and used without any other infrastructure dependencies.
 
