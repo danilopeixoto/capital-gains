@@ -6,6 +6,8 @@ This project template was developed to follow the format of an open-source proje
 
 If you are a reviewer, please refer to the [Contributing Guide](./CONTRIBUTING.md) for instructions on developing the tool and running the documentation, and check the live or source version of the documentation for [usage instructions](./docs/usage.md). The core logic of the implementation is found in the [`capital_gains` module](./capital_gains).
 
+![Architecture](./review-notes/architecture.png)
+
 The command-line interface (CLI) tool is implemented as a Python package and can be developed, installed, and used without any other infrastructure dependencies. In addition, the project offers a containerized development environment for the tool using [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers).
 
 ![Tool](./review-notes/tool.png)
